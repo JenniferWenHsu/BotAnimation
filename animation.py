@@ -29,7 +29,8 @@ class ParticleBox:
                  bounds = [-2, 2, -2, 2],
                  size = 0.04,
                  M = 0.05,
-                 G = 9.8):
+                 G = 9.8, 
+                 prepareTime = 100):
         self.init_state = np.asarray(init_state, dtype=float)
         self.M = M * np.ones(self.init_state.shape[0])
         self.size = size
@@ -37,31 +38,33 @@ class ParticleBox:
         self.time_elapsed = 0
         self.bounds = bounds
         self.G = G
+        self.prepareTime = prepareTime # wait for 5 time steps
+        self.stopTime = 0
 
     def step(self, dt):
         """step once by dt seconds"""
         self.time_elapsed += dt
-        
-        # update positions
-        self.state[:, :2] += dt * self.state[:, 2:]
+        # if self.stopTime!=0: 
+        # 	print("stop time: ", self.stopTime)
+        if self.stopTime > 0: 
+        	self.stopTime -= 1
+        else: 
+        	# update positions
+        	self.state[:, :2] += dt * self.state[:, 2:]
 
-        # check for crossing boundary
-        # crossed_x1 = (self.state[:, 0] < self.bounds[0] + self.size)
-        # crossed_x2 = (self.state[:, 0] > self.bounds[1] - self.size)
-        crossed_y1 = (self.state[:, 1] < self.bounds[2] + self.size)
-        crossed_y2 = (self.state[:, 1] > self.bounds[3] - self.size)
+        	# check for crossing boundary
+        	crossed_y1 = (self.state[:, 1] < self.bounds[2] + self.size)
+        	crossed_y2 = (self.state[:, 1] > self.bounds[3] - self.size)
 
-        # self.state[crossed_x1, 0] = self.bounds[0] + self.size
-        # self.state[crossed_x2, 0] = self.bounds[1] - self.size
+        	self.state[crossed_y1, 1] = self.bounds[2] + self.size
+        	self.state[crossed_y2, 1] = self.bounds[3] - self.size
+        	if crossed_y1: 
+        		self.stopTime = self.prepareTime
 
-        self.state[crossed_y1, 1] = self.bounds[2] + self.size
-        self.state[crossed_y2, 1] = self.bounds[3] - self.size
+        	self.state[crossed_y1 | crossed_y2, 3] *= -1
 
-        # self.state[crossed_x1 | crossed_x2, 2] *= -1
-        self.state[crossed_y1 | crossed_y2, 3] *= -1
-
-        # add gravity
-        self.state[:, 3] -= self.M * self.G * dt
+        	# add gravity
+        	self.state[:, 3] -= self.M * self.G * dt
 
 
 #------------------------------------------------------------
