@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import random 
-
 import math
+
 class Terrain: 
 	# Contructor
 	def __init__(self, 
@@ -19,13 +19,14 @@ class Terrain:
 		self.xlim = xlim
 		self.ylim = ylim 
 		self.pointList = []
+		for i in range(self.segCount + 1): 
+			self.pointList += [random.uniform(self.ylim[0], self.ylim[1])]
+
 
 	def drawTerrain(self): 
 		fig = plt.figure()
 		ax = fig.add_subplot(111, aspect='equal', autoscale_on=False,
                      xlim=self.xlim, ylim=(0,10))
-		for i in range(self.segCount+1): 
-			self.pointList += [random.uniform(self.ylim[0], self.ylim[1])]
 		plt.plot(self.pointList)
 		plt.show()
 
@@ -35,13 +36,16 @@ class Terrain:
 		
 		y1 = self.pointList[x1]
 		y2 = self.pointList[x2]
-		m = (float)(y2-y1)/(x1-x2)
+		m = (float)(y2-y1)/(x2-x1)
 		return y1 + m*(x-x1)
 
 	def getPointList(self): 
-		for i in range(self.segCount+1): 
-			self.pointList += [random.uniform(self.ylim[0], self.ylim[1])]
 		return self.pointList
+
+	def setPointList(self, pointList): 
+		self.pointList = pointList 
+		self.segCount = len(pointList)
+		
 # testTerrain = Terrain()
 # testTerrain.drawTerrain()
 

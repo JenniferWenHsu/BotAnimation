@@ -29,13 +29,13 @@ class Environment:
 		self.state[1] = self.state[1] + dt*vy
 
 		# check for touching ground
-		crossedTerrain = (self.state[1] < 
+		crossedTerrain = (self.state[1] <=
 			self.terrain.getYValue(self.state[0]) + self.size)
 
 		if crossedTerrain: 
 			self.state[3] *= -1
 			self.state[1] = self.state[1] + self.size
-			
+
 		crossed_x1 = (self.state[0] < self.bounds[0] + self.size)
 		crossed_x2 = (self.state[0] > self.bounds[1] - self.size)
 		crossed_y1 = (self.state[1] < self.bounds[2] + self.size)
