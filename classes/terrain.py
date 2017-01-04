@@ -1,29 +1,29 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import random 
+import random
 import math
 
 class Terrain: 
-	# Contructor
+	""" 
+	This constructs the Terrain for the environment. 
+	The terrain is broken up to SEGCOUNT number of segments
+	"""
 	def __init__(self, 
-				startPoint = 0.0, 
-				endPoint = 9.0, 
-				segCount = 10,
-				xlim = (0,9), 
-				ylim = (0,1) 
+				xlim = (0,100), 
+				ylim = (0,1), 
+				segCount = 10
 				): 
-		self.startPoint = startPoint
-		self.endPoint = endPoint
 		self.segCount = segCount
-		self.segLength = (self.endPoint - self.startPoint + 1)/segCount
+		self.segLength = (xlim[1] - xlim[0] + 1)/segCount
 		self.xlim = xlim
 		self.ylim = ylim 
 		self.pointList = []
 		for i in range(self.segCount): 
-			self.pointList += [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
-			#self.pointList += [random.uniform(self.ylim[0], self.ylim[1])]
+			# constructor of terrain is default to generate random terrain
+			#self.pointList += [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
+			self.pointList += [random.uniform(self.ylim[0], self.ylim[1])]
 
-
+	# Plots only the terrain on screen 
 	def drawTerrain(self): 
 		fig = plt.figure()
 		ax = fig.add_subplot(111, aspect='equal', autoscale_on=False,
@@ -31,6 +31,7 @@ class Terrain:
 		plt.plot(self.pointList)
 		plt.show()
 
+    # Obtain the corresponding Y value given a X value
 	def getYValue(self, x): 
 		x1 = int(math.floor(x/self.segLength))
 		x2 = x1 + 1
@@ -41,6 +42,7 @@ class Terrain:
 		m = (float)(y2-y1)/(x2-x1)
 		return y1 + m*(x-x1)
 
+	# Obtain slope of the terrain given a X value
 	def getSlope(self, x): 
 		x1 = int(math.floor(x/self.segLength))
 		x2 = x1 + 1
@@ -52,11 +54,19 @@ class Terrain:
 			y2 = self.pointList[x2]
 		return (float)(y2-y1)/(x2-x1)
 
+	# Return a list of Y points
 	def getPointList(self): 
 		return self.pointList
 
+	# Set pointList to determine the appearance of the terrain
 	def setPointList(self, pointList): 
 		self.pointList = pointList 
 		self.segCount = len(pointList)
 		
+	# Return attribute xlim
+	def getXLim(self): 
+		return self.xlim
 
+	# Return attribute ylim 
+	def getYLim(self): 
+		return self.ylim 
