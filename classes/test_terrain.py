@@ -12,7 +12,7 @@ class TestTerrain(unittest.TestCase):
 		terrain2.setPointList(set2)
 		self.assertEqual(terrain1.getYValue(6.5), 0.5)
 		self.assertEqual(terrain2.getYValue(0.5), 0.4)
-
+		self.assertEqual(terrain2.getYValue(8.5), 0.95)
 
 if __name__ == '__main__': 
 	unittest.main()
