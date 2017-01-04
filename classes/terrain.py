@@ -37,6 +37,10 @@ class Terrain:
 		m = (float)(y2-y1)/(x1-x2)
 		return y1 + m*(x-x1)
 
-testTerrain = Terrain()
-testTerrain.drawTerrain()
+	def getPointList(self): 
+		for i in range(self.segCount+1): 
+			self.pointList += [random.uniform(self.ylim[0], self.ylim[1])]
+		return self.pointList
+# testTerrain = Terrain()
+# testTerrain.drawTerrain()
 

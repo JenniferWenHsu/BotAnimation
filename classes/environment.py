@@ -1,6 +1,11 @@
+import numpy as np 
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation 
+
 class Environment: 
 	def __init__(self, mBot, mTerrain, 
 				time_elapsed = 0, 
+				size = 0.04,
 				M = 1.0, 
 				G = 9.8): 
 		self.bot = mBot
@@ -9,6 +14,7 @@ class Environment:
 		self.M = M
 		self.G = G
 		self.state = self.bot.getState()
+		self.size = size 
 
 	def isTouch(self):
 		value = self.terrain.getYValue()
@@ -32,14 +38,28 @@ class Environment:
 		# add gravity
 		self.state[3] -= self.M * self.G * dt
 
+
 	def startAnimation(self): 
 		# set up figure" 
-		figt = plt.figure()
+		fig = plt.figure()
+		fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
 		ax = fig.add_subplot(111, aspect='equal', autoscale_on=False, 
-							xlim = (-3.2, 3.2), ylim=(-2.4, 2.4))
-		self.terrain.drawTerrain()
+							xlim = (0, 10), ylim=(-1, 7))
+		plt.plot(self.terrain.getPointList())
+		particles, = ax.plot([], [], 'bo', ms=6)
+		dt = 1./30
 
-		# def init(): 
-		# 	"""initialize animation"""
-		# def animate(i): 
+		def init(): 
+			particles.set_data([], [])
+			return particles, 
 
+		def animate(i): 
+			self.timeStep(dt)
+			particles.set_data(self.state[0], self.state[1])
+			ms = int(fig.dpi * 2 * self.size * fig.get_figwidth() / np.diff(ax.get_xbound())[0])
+			particles.set_markersize(ms)
+			return particles,
+
+		ani = animation.FuncAnimation(fig, animate, frames=600, interval=10, blit=True, init_func=init)
+
+		plt.show()
