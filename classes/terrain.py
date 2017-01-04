@@ -26,7 +26,7 @@ class Terrain:
                      xlim=self.xlim, ylim=(0,10))
 		for i in range(self.segCount+1): 
 			self.pointList += [random.uniform(self.ylim[0], self.ylim[1])]
-		plt.plot(pointList)
+		plt.plot(self.pointList)
 		plt.show()
 
 	def getYValue(self, x): 

@@ -1,5 +1,3 @@
-from classes.bot import Bot 
-from classes.terrain import Terrain 
 class Environment: 
 	def __init__(self, mBot, mTerrain, 
 				time_elapsed = 0, 
