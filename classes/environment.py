@@ -6,7 +6,7 @@ import math
 class Environment: 
 	def __init__(self, mBot, mTerrain, 
 				time_elapsed = 0, 
-				bounds = [0, 10, -1, 10],
+				bounds = [0, 9, -1, 10],
 				size = 0.04,
 				M = 1.0, 
 				G = 9.8): 
@@ -25,7 +25,6 @@ class Environment:
 		# update positions
 		vx = self.state[2]
 		vy = self.state[3]
-
 		self.state[0] = self.state[0] + dt*vx
 		self.state[1] = self.state[1] + dt*vy
 
@@ -34,21 +33,32 @@ class Environment:
 			self.terrain.getYValue(self.state[0]) + self.size)
 
 		if crossedTerrain: 
-			"""Newton's Third Law of Motion """
+
 			m = self.terrain.getSlope(self.state[0])
 			# phi: slope angle
 			phi = math.atan(m)
 			# theta: angle between incoming vector plane normal vector
-			theta = math.atan(self.state[1]/self.state[0])
+			phi2 = math.atan(self.state[3]/self.state[2])
+			theta = math.pi/2.0 - phi - phi2
 			totalSpeed = math.sqrt(math.pow(self.state[2], 2)+math.pow(self.state[3], 2))
-			self.state[2] = totalSpeed*math.cos(math.pi/2.-theta+phi)
-			self.state[3] = totalSpeed*math.sin(math.pi/2.-theta+phi) 
+			self.state[2] = totalSpeed*math.cos(math.pi/2.0-theta+phi)
+			self.state[3] = totalSpeed*math.sin(math.pi/2.0-theta+phi)
+
+			self.state[1] = self.terrain.getYValue(self.state[0]) + self.size
 
 		crossed_x1 = (self.state[0] < self.bounds[0] + self.size)
 		crossed_x2 = (self.state[0] > self.bounds[1] - self.size)
 		crossed_y1 = (self.state[1] < self.bounds[2] + self.size)
 		crossed_y2 = (self.state[1] > self.bounds[3] - self.size)
 
+		if crossed_x1: 
+			self.state[0] = self.bounds[0] +self.size
+		if crossed_x2: 
+			self.state[0] = self.bounds[1] - self.size
+		if crossed_y1: 
+			self.state[1] = self.bounds[2] + self.size
+		if crossed_y2: 
+			self.state[1] = self.bounds[3] - self.size
 		# bouncing back 
 		if crossed_x1 | crossed_x2: 
 			self.state[2] *= -1
@@ -76,8 +86,8 @@ class Environment:
 			self.timeStep(dt)
 			particles.set_data([self.state[0]], [self.state[1]])
 			#print("state:", (self.state[0], self.state[1]))
-			#ms = int(fig.dpi * 2 * self.size * fig.get_figwidth() / np.diff(ax.get_xbound())[0])
-			particles.set_markersize(10)
+			ms = int(fig.dpi * 2 * self.size * fig.get_figwidth() / np.diff(ax.get_xbound())[0])
+			particles.set_markersize(ms)
 			return particles,
 
 		ani = animation.FuncAnimation(fig, animate, frames=600, interval=10, blit=True, init_func=init)
