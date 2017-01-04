@@ -25,12 +25,12 @@ class ParticleBox:
     bounds is the size of the box: [xmin, xmax, ymin, ymax]
     """
     def __init__(self,
-                 init_state = [[-3.2, -2.4, 0.5, 0.5]],
+                 init_state = [[-3.2, -2.4, 0.5, 0.7]],
                  bounds = [-2, 2, -2, 2],
                  size = 0.04,
                  M = 0.05,
                  G = 9.8, 
-                 prepareTime = 100):
+                 prepareTime = 50):
         self.init_state = np.asarray(init_state, dtype=float)
         self.M = M * np.ones(self.init_state.shape[0])
         self.size = size
