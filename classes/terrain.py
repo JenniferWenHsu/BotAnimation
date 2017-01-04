@@ -20,8 +20,8 @@ class Terrain:
 		self.ylim = ylim 
 		self.pointList = []
 		for i in range(self.segCount): 
-			#self.pointList += [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
-			self.pointList += [random.uniform(self.ylim[0], self.ylim[1])]
+			self.pointList += [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
+			#self.pointList += [random.uniform(self.ylim[0], self.ylim[1])]
 
 
 	def drawTerrain(self): 

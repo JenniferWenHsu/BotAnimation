@@ -3,7 +3,7 @@ class Bot:
 	init_state is a 4 element tuple, representing (x, y, vx, vy)
     """
 	def __init__(self, 
-				init_state = [1, 1.5, 0.001, 0]): 
+				init_state = [1, 5, 0, 0]): 
 		self.state = init_state
 
 	def getState(self): 
