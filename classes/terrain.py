@@ -39,6 +39,13 @@ class Terrain:
 		m = (float)(y2-y1)/(x2-x1)
 		return y1 + m*(x-x1)
 
+	def getSlope(self, x): 
+		x1 = int(math.floor(x/self.segLength))
+		x2 = int(math.ceil(x/self.segLength))
+		y1 = self.pointList[x1]
+		y2 = self.pointList[x2]
+		return (float)(y2-y1)/(x2-x1)
+		
 	def getPointList(self): 
 		return self.pointList
 

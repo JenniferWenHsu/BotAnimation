@@ -1,6 +1,7 @@
 import numpy as np 
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation 
+import math
 
 class Environment: 
 	def __init__(self, mBot, mTerrain, 
@@ -33,8 +34,15 @@ class Environment:
 			self.terrain.getYValue(self.state[0]) + self.size)
 
 		if crossedTerrain: 
-			self.state[3] *= -1
-			self.state[1] = self.state[1] + self.size
+			"""Newton's Third Law of Motion """
+			m = self.terrain.getSlope(self.state[0])
+			# phi: slope angle
+			phi = math.atan(m)
+			# theta: angle between incoming vector plane normal vector
+			theta = math.atan(self.state[1]/self.state[0])
+			totalSpeed = math.sqrt(math.pow(self.state[2], 2)+math.pow(self.state[3], 2))
+			self.state[2] = totalSpeed*math.cos(math.pi/2.-theta+phi)
+			self.state[3] = totalSpeed*math.sin(math.pi/2.-theta+phi) 
 
 		crossed_x1 = (self.state[0] < self.bounds[0] + self.size)
 		crossed_x2 = (self.state[0] > self.bounds[1] - self.size)
