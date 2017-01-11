@@ -36,7 +36,6 @@ class Environment:
 		crossedTerrain = (self.state[1] <=
 			self.terrain.getYValue(self.state[0]) + self.size)
 
-		# deal with bouncing off a slope 
 		if crossedTerrain: 
 			m = self.terrain.getSlope(self.state[0])
 			# phi: slope angle
